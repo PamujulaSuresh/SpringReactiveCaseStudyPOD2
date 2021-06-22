@@ -1,0 +1,47 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: ACCOUNT-SERVICE
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/account/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ACCOUNT-SERVICE
+                fallbackuri: forward:/accountServiceFallBack
+        - id: ACCOUNT-SERVICE-FUNC
+          uri: lb://ACCOUNT-SERVICE-FUNC
+          predicates:
+            - Path=/account_func/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ACCOUNT-SERVICE-FUNC
+                fallbackuri: forward:/accountServiceFallBack
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/bank/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackuri: forward:/userServiceFallBack
+        - id: DEPARTMENT-SERVICE
+          uri: lb://DEPARTMENT-SERVICE
+          predicates:
+            - Path=/departments/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: DEPARTMENT-SERVICE
+                fallbackuri: forward:/departmentServiceFallBack
+
+ 
